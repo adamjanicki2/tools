@@ -1,7 +1,7 @@
 {
-  "name": "react-skeleton",
+  "name": "tools",
   "version": "0.1.0",
-  "homepage": "https://adamjanicki.xyz/react-skeleton",
+  "homepage": "https://adamjanicki.xyz/tools",
   "private": true,
   "dependencies": {
     "@adamjanicki/ui": "^1.5.4",

@@ -9,6 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
   overflow-x: hidden;
+  background-color: #f4f4fb;
 }
 
 p {
@@ -18,6 +19,18 @@ p {
 .page-title-text {
   font-size: calc(2.5rem + 1vw);
   font-weight: 700;
+}
+
+.home-title-text {
+  font-size: calc(3rem + 1.2vw);
+  font-weight: 800;
+}
+
+.home-logo {
+  animation: ajui-spinner-animation 30s linear infinite;
+  transform-origin: center;
+  width: min(10vh, 10vw);
+  height: min(10vh, 10vw);
 }
 
 .bordering {

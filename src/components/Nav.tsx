@@ -28,9 +28,8 @@ const Nav = () => {
   return (
     <nav className="flex items-center justify-between w-100 nav pv2 ph4">
       <div className="flex items-center justify-between bar-container">
-        <UnstyledLink className="flex" to="/">
-          <Logo width="24" height="24" className="mr2" />
-          <span className="nav-title desktop">React Skeleton</span>
+        <UnstyledLink to="/">
+          <Logo width="36" height="36" />
         </UnstyledLink>
         <div className="mobile">
           <Hamburger open={open} onClick={() => setOpen(!open)} />
@@ -41,7 +40,6 @@ const Nav = () => {
         style={{ display: open ? "flex" : undefined }}
       >
         <Navlink to="/">Home</Navlink>
-        <Navlink to="/about/">About</Navlink>
       </ul>
     </nav>
   );
