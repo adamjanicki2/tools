@@ -1,5 +1,6 @@
 :root {
   --breakpoint: 768px;
+  --fade: rgba(100, 100, 100, 0.2) 0px 8px 24px 0px;
 }
 
 body {
@@ -35,4 +36,17 @@ p {
 
 .bordering {
   border: 2px solid green;
+}
+
+.fade {
+  box-shadow: var(--fade);
+}
+
+@media (hover: hover) {
+  .hover-fade {
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  .hover-fade:hover {
+    box-shadow: var(--fade);
+  }
 }

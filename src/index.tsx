@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 // Make sure to import this first so your styles take priority!
 import "@adamjanicki/ui/style.css";
+import "@adamjanicki/ui-extended/style.css";
 import "tachyons/css/tachyons.min.css";
 // All your styles go here!
 import "src/css/style.css";

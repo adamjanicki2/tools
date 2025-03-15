@@ -2,11 +2,18 @@
   display: none;
 }
 
+.toolcard {
+  width: 30vw;
+}
+
 @media only screen and (max-width: 768px) {
   .mobile {
     display: block;
   }
   .desktop {
     display: none;
+  }
+  .toolcard {
+    width: 90vw;
   }
 }
