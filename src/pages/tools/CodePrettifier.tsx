@@ -16,7 +16,7 @@ export default function CodePrettifier() {
 
   return (
     <div className="flex flex-wrap">
-      <div className="flex flex-column prettifier-section ma3">
+      <div className="flex flex-column prettifier-section">
         <div className="flex items-center mb3">
           <Select
             aria-label="language"
@@ -50,7 +50,7 @@ export default function CodePrettifier() {
         />
       </div>
       {formatted && (
-        <div className="flex flex-column prettifier-section ma3">
+        <div className="flex flex-column prettifier-section">
           <div className="flex items-center justify-between w-100 br3 br--top bg-light-gray ba b--moon-gray pa2">
             <Badge type="info">{lintOptions[lang]}</Badge>
             <CopyButton text={formatted} />

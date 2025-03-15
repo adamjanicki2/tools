@@ -9,6 +9,7 @@ type Props = {
 export default function Tooltip({ content, children, className }: Props) {
   return (
     <UiTooltip
+      placement="bottom"
       tooltipContent={
         <div
           className="pa2 f5 fw5 br3 bg-white ba bade"

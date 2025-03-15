@@ -9,3 +9,15 @@ export function createPath(tool: Tool): string {
   }
   return path;
 }
+
+export function randomElement<T>(
+  arr: T[],
+  predicate?: (val: T) => boolean
+): T | undefined {
+  let idx = Math.floor(Math.random() * arr.length);
+  while (predicate && !predicate(arr[idx])) {
+    idx = Math.floor(Math.random() * arr.length);
+  }
+
+  return arr[idx];
+}
