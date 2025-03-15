@@ -34,6 +34,10 @@ p {
   height: min(10vh, 10vw);
 }
 
+.w-fc {
+  width: fit-content;
+}
+
 .bordering {
   border: 2px solid green;
 }
