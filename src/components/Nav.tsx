@@ -27,9 +27,10 @@ const Nav = () => {
   );
 
   return (
-    <nav className="flex items-center justify-between w-100 nav pv2 ph4">
-      <div className="flex items-center justify-between bar-container">
+    <nav className="nav">
+      <div className="flex items-center justify-between">
         <UnstyledLink to="/" className="flex items-center">
+          <span className="nav-title mr2 desktop">Tools</span>
           <Logo width="36" height="36" />
         </UnstyledLink>
         <div className="mobile">
@@ -37,7 +38,7 @@ const Nav = () => {
         </div>
       </div>
       <ul
-        className="flex items-center desktop link-container ma0"
+        className="flex desktop link-container"
         style={{ display: open ? "flex" : undefined }}
       >
         {tools.map((tool, i) => (

@@ -4,6 +4,7 @@ import {
   faImage,
 } from "@fortawesome/free-regular-svg-icons";
 import CodePrettifier from "src/pages/tools/CodePrettifier";
+import TextToImage from "src/pages/tools/TextToImage";
 import UnixConverter from "src/pages/tools/UnixConverter";
 import type { Tool, ParentSection } from "src/utils/types";
 
@@ -45,6 +46,6 @@ export const tools: readonly Tool[] = [
       "Unlike whatever crazy AI thing you're thinking of, this is a simple tool that converts text to a PNG.",
     icon: faImage,
     parent: imageSection,
-    Component: UnixConverter,
+    Component: TextToImage,
   },
 ];

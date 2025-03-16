@@ -54,9 +54,8 @@ export default function UnixConverter() {
   const localTimezone = moment.tz.guess();
 
   return (
-    <div className="flex flex-column items-center w-90">
-      <div className="flex flex-wrap justify-between">
-        <h1 className="w-100 mh3">To Readable Time</h1>
+    <div className="flex flex-column items-center w-100">
+      <div className="flex flex-wrap justify-center w-100">
         <div className="flex flex-column prettifier-section">
           <Input
             value={value}

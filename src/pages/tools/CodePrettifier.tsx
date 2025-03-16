@@ -15,7 +15,7 @@ export default function CodePrettifier() {
   const [error, setError] = useState("");
 
   return (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap justify-center w-100">
       <div className="flex flex-column prettifier-section">
         <div className="flex items-center mb3">
           <Select

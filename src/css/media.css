@@ -3,12 +3,20 @@
 }
 
 .toolcard {
-  width: 30vw;
+  width: 30%;
 }
 
 .prettifier-section {
-  width: 40vw;
+  width: 40%;
   margin: 1rem;
+}
+
+.app-container {
+  display: flex;
+}
+
+.image-section {
+  margin: 16px;
 }
 
 @media only screen and (max-width: 768px) {
@@ -19,9 +27,15 @@
     display: none;
   }
   .toolcard {
-    width: 90vw;
+    width: 90%;
   }
   .prettifier-section {
-    width: 90vw;
+    width: 90%;
+  }
+  .app-container {
+    flex-direction: column;
+  }
+  .image-section {
+    width: 90%;
   }
 }
