@@ -20,7 +20,6 @@ const fonts = [
 ] as const;
 type Font = (typeof fonts)[number];
 
-const size = 400;
 const [min, max] = [8, 200] as const;
 const defaultFontSize = 128;
 
@@ -33,6 +32,8 @@ export default function TextToImage() {
   const textContainerRef = useRef<HTMLDivElement>(null);
   const [bold, setBold] = useState(false);
   const [italics, setItalics] = useState(false);
+
+  const size = Math.min(420, Math.floor(window.innerWidth * 0.9));
 
   const download = async (imgSize: number) => {
     if (textContainerRef.current) {
@@ -86,28 +87,29 @@ export default function TextToImage() {
         <ColorInput color={textColor} setColor={setTextColor} />
       </div>
       <div className="flex flex-column image-section">
-        <div
-          ref={textContainerRef}
-          style={{
-            backgroundColor: `#${bgColor || "fff"}`,
-            color: `#${textColor || "000"}`,
-            fontFamily: `${font !== "System" ? font + ", " : ""}-apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif`,
-            whiteSpace: "pre-line",
-            width: size,
-            height: size,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            fontSize: renderableFontSize,
-            overflow: "hidden",
-          }}
-          className={classNames(
-            "pa4 ba b--moon-gray tc",
-            bold ? "b" : "",
-            italics ? "i" : ""
-          )}
-        >
-          {text}
+        <div className="ba b--moon-gray" style={{ overflow: "hidden" }}>
+          <div
+            ref={textContainerRef}
+            style={{
+              backgroundColor: `#${bgColor || "fff"}`,
+              color: `#${textColor || "000"}`,
+              fontFamily: `${font !== "System" ? font + ", " : ""}-apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif`,
+              whiteSpace: "pre-line",
+              width: size,
+              height: size,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: renderableFontSize,
+            }}
+            className={classNames(
+              "pa4 tc",
+              bold ? "b" : "",
+              italics ? "i" : ""
+            )}
+          >
+            {text}
+          </div>
         </div>
         <Button className="w-fc mt2" onClick={() => download(1024)}>
           Download
