@@ -14,3 +14,32 @@ p {
 .bordering {
   border: 2px solid red;
 }
+
+.home-title-text {
+  font-size: calc(3rem + 1.2vw);
+  font-weight: 800;
+}
+
+.home-logo {
+  animation: ajui-spinner-animation 30s linear infinite;
+  transform-origin: center;
+  width: min(10vh, 10vw);
+  height: min(10vh, 10vw);
+}
+
+.w-fc {
+  width: fit-content;
+}
+
+.fade {
+  box-shadow: var(--fade);
+}
+
+@media (hover: hover) {
+  .hover-fade {
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  .hover-fade:hover {
+    box-shadow: var(--fade);
+  }
+}
