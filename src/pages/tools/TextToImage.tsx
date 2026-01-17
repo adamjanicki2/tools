@@ -97,9 +97,17 @@ export default function TextToImage() {
     backgroundRepeat: "no-repeat",
   };
 
-  let icon: React.ReactNode = "#";
+  let icon: React.ReactNode = (
+    <Tooltip
+      offset={2}
+      anchor={<Icon icon={infoSquare} vfx={{ color: "muted" }} />}
+      vfx={{ fontSize: "s", fontWeight: 5, z: "nav", color: "default" }}
+    >
+      Can be either an image URL, or hex color
+    </Tooltip>
+  );
 
-  const { src, color } = getBackgroundInfo(background);
+  const { src, color, fallback } = getBackgroundInfo(background);
   if (src) {
     boxStyle = {
       ...boxStyle,
@@ -108,8 +116,11 @@ export default function TextToImage() {
       backgroundPosition,
     };
     icon = <Icon icon={vista} />;
-  } else {
+  } else if (color) {
     boxStyle.backgroundColor = `#${color}`;
+    icon = "#";
+  } else {
+    boxStyle.backgroundColor = `#${fallback}`;
   }
 
   return (
@@ -139,7 +150,10 @@ export default function TextToImage() {
             placeholder={`${defaultFontSize}`}
             type="number"
             value={fontSize}
-            onChange={(e) => setFontSize(parseInt(e.target.value))}
+            onChange={(e) => {
+              const next = parseInt(e.target.value, 10);
+              setFontSize(Number.isNaN(next) ? min : next);
+            }}
           />
           <Select
             aria-label="font"
@@ -152,15 +166,7 @@ export default function TextToImage() {
         <Checkbox label="Italics" checked={italics} toggle={setItalics} />
         <ui.h3 vfx={{ marginY: "s" }}>Text Color</ui.h3>
         <ColorInput value={textColor} setValue={setTextColor} />
-        <ui.h3 vfx={{ axis: "x", align: "center", gap: "s", marginY: "s" }}>
-          Background
-          <Tooltip
-            anchor={<Icon icon={infoSquare} vfx={{ color: "muted" }} />}
-            vfx={{ fontSize: "default", fontWeight: 5 }}
-          >
-            Can be either an image URL, or hex color
-          </Tooltip>
-        </ui.h3>
+        <ui.h3 vfx={{ marginY: "s" }}>Background</ui.h3>
         <IconInput
           startIcon={
             <Box vfx={{ axis: "x", align: "center", color: "muted" }}>
@@ -245,6 +251,8 @@ function LabeledSelect<T extends string>({
 }
 
 const hexColorRegex = /^([A-Fa-f0-9]{0,6})$/;
+const fullHexColorRegex = /^([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
+const dataUrlRegex = /^data:image\/[a-zA-Z]+;base64,/;
 
 function ColorInput({ value: color, setValue: setColor }: Props) {
   return (
@@ -306,9 +314,12 @@ const urlRegex =
   /^(https?:\/\/)?([a-zA-Z\d-]+\.)+[a-zA-Z]{2,}(\/[\w\d\-._~:/?#[\]@!$&'()*+,;=%]*)?$/i;
 
 function getBackgroundInfo(background: string) {
-  if (urlRegex.test(background)) return { src: background };
-  if (hexColorRegex.test(background)) return { color: background };
-  return { color: "fff" };
+  const trimmed = background.trim();
+  if (urlRegex.test(trimmed) || dataUrlRegex.test(trimmed)) {
+    return { src: trimmed };
+  }
+  if (fullHexColorRegex.test(trimmed)) return { color: trimmed };
+  return { fallback: "fff" };
 }
 
 type CheckboxProps = {
