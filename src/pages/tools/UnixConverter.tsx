@@ -1,8 +1,10 @@
 import {
   Alert,
+  Box,
   Button,
   Input,
   Spinner,
+  ui,
   useSearchParams,
 } from "@adamjanicki/ui";
 import moment from "moment-timezone";
@@ -61,47 +63,57 @@ export default function UnixConverter() {
   const localTimezone = moment.tz.guess();
 
   return (
-    <div className="flex flex-column items-center w-100">
-      <div className="flex flex-wrap justify-center w-100">
-        <div className="flex flex-column prettifier-section">
+    <Box vfx={{ axis: "y", align: "center", width: "full" }}>
+      <Box vfx={{ axis: "x", wrap: true, justify: "center", width: "full" }}>
+        <Box vfx={{ axis: "y", gap: "s" }} className="prettifier-section">
           <Input
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            className="bg-white mb2"
             placeholder="Unix timestamp"
           />
           <Button
-            className="w-fc"
+            vfx={{ width: "fit" }}
             onClick={() => setSearchParams({ timestamp: value })}
           >
             Convert
           </Button>
-        </div>
-        <div className="flex flex-column prettifier-section ba b--moon-gray br3 bg-white pa3">
-          <h3 className="mt0">Local Time</h3>
+        </Box>
+        <Box
+          vfx={{
+            axis: "y",
+            border: true,
+            radius: "rounded",
+            backgroundColor: "default",
+            padding: "m",
+            shadow: "subtle",
+          }}
+          className="prettifier-section"
+        >
+          <ui.h3 vfx={{ marginTop: "none" }}>Local Time</ui.h3>
           <CopyableCode>
             {local.format("dddd, MMMM Do YYYY, h:mm:ss a") +
               " " +
               moment.tz(localTimezone).zoneAbbr()}
           </CopyableCode>
-          <h3>UTC/GMT</h3>
+          <ui.h3>UTC/GMT</ui.h3>
           <CopyableCode>
             {momentObj.clone().utc().format("dddd, MMMM Do YYYY, h:mm:ss a") +
               " GMT"}
           </CopyableCode>
-          <h3>This day in history</h3>
+          <ui.h3>This day in history</ui.h3>
           {loading && <Spinner />}
           {event && !loading && (
-            <p className="mv0">
-              <span className="b">{event.year}</span>: {event?.description}
-            </p>
+            <ui.p vfx={{ marginY: "none" }}>
+              <ui.span vfx={{ fontWeight: 7 }}>{event.year}</ui.span>:{" "}
+              {event?.description}
+            </ui.p>
           )}
           {!loading && !event && (
             <Alert type="error">Error fetching a cool event.</Alert>
           )}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 

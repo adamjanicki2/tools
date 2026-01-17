@@ -1,6 +1,7 @@
 body {
   overscroll-behavior: none;
   overflow-x: hidden;
+  background-color: #f4f4fb;
 }
 
 p {
@@ -21,25 +22,8 @@ p {
 }
 
 .home-logo {
-  animation: ajui-spinner-animation 30s linear infinite;
+  animation: aui-spinner-animation 30s linear infinite;
   transform-origin: center;
   width: min(10vh, 10vw);
   height: min(10vh, 10vw);
-}
-
-.w-fc {
-  width: fit-content;
-}
-
-.fade {
-  box-shadow: var(--fade);
-}
-
-@media (hover: hover) {
-  .hover-fade {
-    transition: box-shadow 0.3s ease-in-out;
-  }
-  .hover-fade:hover {
-    box-shadow: var(--fade);
-  }
 }

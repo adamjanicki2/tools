@@ -1,6 +1,12 @@
 import "src/components/nav.css";
 
-import { Link, TripleFade as Hamburger, UnstyledLink } from "@adamjanicki/ui";
+import {
+  Box,
+  Link,
+  TripleFade as Hamburger,
+  ui,
+  UnstyledLink,
+} from "@adamjanicki/ui";
 import { useState } from "react";
 import Logo from "src/img/logo.svg?react";
 import { tools } from "src/pages/tools";
@@ -10,29 +16,36 @@ type NavlinkProps = {
   children: React.ReactNode;
 };
 
-const Nav = () => {
+function Nav() {
   const [open, setOpen] = useState(false);
   const closeMenu = () => setOpen(false);
 
-  const Navlink = (props: NavlinkProps) => (
-    <li className="navlink-li">
-      <Link className="navlink" onClick={closeMenu} {...props} />
-    </li>
-  );
+  function Navlink(props: NavlinkProps) {
+    return (
+      <ui.li className="navlink-li">
+        <Link className="navlink" onClick={closeMenu} {...props} />
+      </ui.li>
+    );
+  }
 
   return (
-    <nav className="nav">
-      <div className="flex items-center justify-between">
-        <UnstyledLink to="/" className="flex items-center" onClick={closeMenu}>
-          <span className="nav-title mr2 desktop">Tools</span>
+    <ui.nav className="nav">
+      <Box vfx={{ axis: "x", align: "center", justify: "between" }}>
+        <UnstyledLink
+          to="/"
+          vfx={{ axis: "x", align: "center", gap: "s" }}
+          onClick={closeMenu}
+        >
+          <ui.span className="nav-title desktop">Tools</ui.span>
           <Logo width="36" height="36" />
         </UnstyledLink>
-        <div className="mobile">
+        <Box className="mobile">
           <Hamburger open={open} onClick={() => setOpen(!open)} />
-        </div>
-      </div>
-      <ul
-        className="flex desktop link-container"
+        </Box>
+      </Box>
+      <ui.ul
+        vfx={{ axis: "y" }}
+        className="desktop link-container"
         style={{ display: open ? "flex" : undefined }}
       >
         {tools.map((tool, i) => (
@@ -40,9 +53,9 @@ const Nav = () => {
             {tool.name}
           </Navlink>
         ))}
-      </ul>
-    </nav>
+      </ui.ul>
+    </ui.nav>
   );
-};
+}
 
 export default Nav;

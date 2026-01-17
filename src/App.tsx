@@ -1,4 +1,4 @@
-import { Route, Router, Routes } from "@adamjanicki/ui";
+import { Box, Route, Router, Routes } from "@adamjanicki/ui";
 import Footer from "src/components/Footer";
 import Nav from "src/components/Nav";
 import Home from "src/pages/Home";
@@ -10,9 +10,12 @@ import Page from "./components/Page";
 export default function App() {
   return (
     <Router basename="/tools">
-      <div className="app-container w-100" style={{ height: "100%" }}>
+      <Box
+        vfx={{ axis: "x", width: "full", height: "full" }}
+        className="app-container"
+      >
         <Nav />
-        <div style={{ flexGrow: 1 }}>
+        <Box vfx={{ stretch: "grow" }}>
           <Routes fallback={<NotFound />}>
             <Route path="/" element={<Home />} />
             {tools.map((tool, i) => (
@@ -28,8 +31,8 @@ export default function App() {
             ))}
           </Routes>
           <Footer />
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Router>
   );
 }

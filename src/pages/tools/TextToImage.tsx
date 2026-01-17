@@ -1,5 +1,12 @@
-import { Button, IconInput, Input, Select, TextArea } from "@adamjanicki/ui";
-import { classNames } from "@adamjanicki/ui/functions";
+import {
+  Box,
+  Button,
+  IconInput,
+  Input,
+  Select,
+  TextArea,
+  ui,
+} from "@adamjanicki/ui";
 import html2canvas from "html2canvas";
 import { useRef, useState } from "react";
 
@@ -51,19 +58,26 @@ export default function TextToImage() {
   const renderableFontSize = Math.max(Math.min(max, fontSize), min);
 
   return (
-    <div className="flex flex-wrap justify-center items-center w-100">
-      <div className="flex flex-column image-section">
-        <h3>Text</h3>
+    <Box
+      vfx={{
+        axis: "x",
+        wrap: true,
+        justify: "center",
+        align: "center",
+        width: "full",
+      }}
+    >
+      <Box vfx={{ axis: "y" }} className="image-section">
+        <ui.h3>Text</ui.h3>
         <TextArea
           rows={3}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="bg-white"
+          vfx={{ width: "full" }}
         />
-        <h3>Font</h3>
-        <div className="flex items-center">
+        <ui.h3>Font</ui.h3>
+        <Box vfx={{ axis: "x", align: "center", gap: "s" }}>
           <Input
-            className="bg-white mr2"
             style={{ width: "8ch" }}
             max={max}
             min={min}
@@ -77,46 +91,49 @@ export default function TextToImage() {
             options={fonts as any}
             onChange={(e) => setFont(e.target.value as Font)}
             value={font}
-            className="bg-white mr2"
           />
-        </div>
+        </Box>
         <Checkbox label="Bold" checked={bold} toggle={setBold} />
         <Checkbox label="Italics" checked={italics} toggle={setItalics} />
-        <h3>Background Color</h3>
+        <ui.h3>Background Color</ui.h3>
         <ColorInput color={bgColor} setColor={setBgColor} />
-        <h3>Text Color</h3>
+        <ui.h3>Text Color</ui.h3>
         <ColorInput color={textColor} setColor={setTextColor} />
-      </div>
-      <div className="flex flex-column image-section">
-        <div className="ba b--moon-gray" style={{ overflow: "hidden" }}>
-          <div
+      </Box>
+      <Box vfx={{ axis: "y" }} className="image-section">
+        <Box vfx={{ border: true, overflow: "hidden" }}>
+          <Box
             ref={textContainerRef}
+            vfx={{
+              axis: "x",
+              align: "center",
+              justify: "center",
+              padding: "l",
+              textAlign: "center",
+              fontWeight: bold ? 7 : undefined,
+              italics: italics ? true : undefined,
+            }}
             style={{
               backgroundColor: `#${bgColor || "fff"}`,
               color: `#${textColor || "000"}`,
-              fontFamily: `${font !== "System" ? font + ", " : ""}-apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif`,
+              fontFamily: font !== "System" ? font : undefined,
               whiteSpace: "pre-line",
               width: size,
               height: size,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
               fontSize: renderableFontSize,
             }}
-            className={classNames(
-              "pa4 tc",
-              bold ? "b" : "",
-              italics ? "i" : ""
-            )}
           >
             {text}
-          </div>
-        </div>
-        <Button className="w-fc mt2" onClick={() => download(1024)}>
+          </Box>
+        </Box>
+        <Button
+          vfx={{ width: "fit", marginTop: "s" }}
+          onClick={() => download(1024)}
+        >
           Download
         </Button>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
@@ -131,11 +148,11 @@ function ColorInput({ color, setColor }: Props) {
   return (
     <IconInput
       startIcon={
-        <span style={{ color: "#777" }} className="b ml2">
+        <ui.span vfx={{ fontWeight: 7 }} style={{ color: "#777" }}>
           #
-        </span>
+        </ui.span>
       }
-      className="bg-white"
+      vfx={{ width: "full", gap: "xs", paddingLeft: "s" }}
       inputProps={{
         value: color,
         onChange: (e) => {
@@ -155,13 +172,13 @@ type CheckboxProps = {
 };
 function Checkbox({ checked, toggle, label }: CheckboxProps) {
   return (
-    <div className="flex items-center mv1">
-      <span className="f5 fw5 mr2">{label}</span>
-      <input
+    <Box vfx={{ axis: "x", align: "center", gap: "s", marginY: "xs" }}>
+      <ui.span vfx={{ fontSize: "s", fontWeight: 5 }}>{label}</ui.span>
+      <ui.input
         checked={checked}
         type="checkbox"
         onChange={(e) => toggle(e.target.checked)}
       />
-    </div>
+    </Box>
   );
 }

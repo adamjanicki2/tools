@@ -1,4 +1,12 @@
-import { Badge, Banner, Button, Icon, Select, TextArea } from "@adamjanicki/ui";
+import {
+  Alert,
+  Badge,
+  Box,
+  Button,
+  Icon,
+  Select,
+  TextArea,
+} from "@adamjanicki/ui";
 import { check, clipboard } from "@adamjanicki/ui/icons";
 import { useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -11,19 +19,17 @@ export default function CodePrettifier() {
   const [error, setError] = useState("");
 
   return (
-    <div className="flex flex-wrap justify-center w-100">
-      <div className="flex flex-column prettifier-section">
-        <div className="flex items-center mb3">
+    <Box vfx={{ axis: "x", wrap: true, justify: "center", width: "full" }}>
+      <Box vfx={{ axis: "y", gap: "m" }} className="prettifier-section">
+        <Box vfx={{ axis: "x", align: "center", gap: "s" }}>
           <Select
-            aria-label="language"
             options={Object.keys(lintOptions)}
-            getOptionLabel={(o) => lintOptions[o as Lang]}
+            getOptionLabel={(option) => lintOptions[option as Lang]}
             onChange={(e) => setLang(e.target.value as Lang)}
             value={lang}
-            className="bg-white mr2"
           />
           <Button
-            className="w-fc"
+            vfx={{ width: "fit" }}
             onClick={() =>
               lint(code, lang).then(({ code, error }) => {
                 if (error) {
@@ -37,25 +43,45 @@ export default function CodePrettifier() {
           >
             Format
           </Button>
-        </div>
+        </Box>
         <TextArea
           value={code}
           onChange={(e) => setCode(e.target.value)}
           rows={16}
-          className="bg-white"
+          vfx={{ width: "full" }}
         />
-      </div>
+      </Box>
       {formatted && (
-        <div className="flex flex-column prettifier-section">
-          <div className="flex items-center justify-between w-100 br3 br--top bg-light-gray ba b--moon-gray pa2">
+        <Box
+          vfx={{
+            axis: "y",
+            radius: "rounded",
+            border: true,
+            overflow: "hidden",
+            backgroundColor: "default",
+            shadow: "subtle",
+          }}
+          className="prettifier-section"
+        >
+          <Box
+            vfx={{
+              axis: "x",
+              align: "center",
+              justify: "between",
+              width: "full",
+              backgroundColor: "muted",
+              padding: "s",
+              borderBottom: true,
+            }}
+          >
             <Badge type="info">{lintOptions[lang]}</Badge>
             <CopyButton text={formatted} />
-          </div>
-          <div className="flex flex-column w-100 br3 br--bottom bg-white bl br bb b--moon-gray pa2">
+          </Box>
+          <Box vfx={{ axis: "y", width: "full", padding: "s" }}>
             {error && (
-              <Banner type="error" style={{ width: "100%" }}>
+              <Alert type="error" vfx={{ width: "full" }}>
                 {error}
-              </Banner>
+              </Alert>
             )}
             <SyntaxHighlighter
               showLineNumbers
@@ -68,10 +94,10 @@ export default function CodePrettifier() {
                 margin: 0,
               }}
             />
-          </div>
-        </div>
+          </Box>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
 

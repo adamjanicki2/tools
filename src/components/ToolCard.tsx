@@ -1,4 +1,4 @@
-import { Icon, UnstyledLink } from "@adamjanicki/ui";
+import { Icon, ui, UnstyledLink } from "@adamjanicki/ui";
 import type { Tool } from "src/utils/types";
 
 type Props = {
@@ -9,13 +9,31 @@ export default function ToolCard({ tool }: Props) {
   return (
     <UnstyledLink
       to={`/${tool.path}`}
-      className="flex flex-column items-start ba br3 b--moon-gray ma3 pa3 bg-white toolcard hover-fade"
+      vfx={{
+        axis: "y",
+        align: "start",
+        border: true,
+        radius: "rounded",
+        padding: "m",
+        backgroundColor: "default",
+        shadow: "subtle",
+      }}
+      className="toolcard hover-fade"
     >
-      <h2 className="f3 fw7 ma0">
-        <Icon icon={tool.icon} />
+      <ui.h2
+        vfx={{
+          axis: "x",
+          align: "center",
+          gap: "s",
+          fontSize: "l",
+          fontWeight: 7,
+          margin: "none",
+        }}
+      >
+        <Icon vfx={{ color: "muted" }} icon={tool.icon} size="m" />
         {tool.name}
-      </h2>
-      <p className="f5 fw5 dark-gray">{tool.description}</p>
+      </ui.h2>
+      <ui.p vfx={{ fontWeight: 5, color: "muted" }}>{tool.description}</ui.p>
     </UnstyledLink>
   );
 }

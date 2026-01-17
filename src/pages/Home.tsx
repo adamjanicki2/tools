@@ -1,3 +1,4 @@
+import { Box, ui } from "@adamjanicki/ui";
 import { useEffect } from "react";
 import ToolCard from "src/components/ToolCard";
 import Logo from "src/img/logo.svg?react";
@@ -9,23 +10,42 @@ export default function Home() {
   }, []);
 
   return (
-    <div
-      className="flex flex-column items-center pv4"
+    <Box
+      vfx={{ axis: "y", align: "center", paddingY: "xl" }}
       style={{ minHeight: "60vh" }}
     >
-      <div className="flex items-center pv4">
-        <h1 className="home-title-text mr3 ma0">Tools</h1>
+      <Box vfx={{ axis: "x", align: "center", gap: "m", paddingY: "xl" }}>
+        <ui.h1 vfx={{ margin: "none" }} className="home-title-text">
+          Tools
+        </ui.h1>
         <Logo className="home-logo" />
-      </div>
-      <p className="ph4 f3 fw5 dark-gray tc mt0">
+      </Box>
+      <ui.p
+        vfx={{
+          paddingX: "l",
+          fontSize: "l",
+          fontWeight: 5,
+          color: "muted",
+          textAlign: "center",
+          marginTop: "none",
+        }}
+      >
         Check out the list of tools available!
-      </p>
+      </ui.p>
 
-      <div className="flex justify-center flex-wrap ph4">
+      <Box
+        vfx={{
+          axis: "x",
+          justify: "center",
+          wrap: true,
+          gap: "m",
+          paddingX: "l",
+        }}
+      >
         {tools.map((tool, i) => (
           <ToolCard key={i} tool={tool} />
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

@@ -1,6 +1,5 @@
 // Make sure to import this first so your styles take priority!
 import "@adamjanicki/ui/style.css";
-import "tachyons/css/tachyons.min.css";
 // All your styles go here!
 import "src/css/media.css";
 import "src/css/style.css";

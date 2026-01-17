@@ -1,4 +1,4 @@
-import { classNames, Tooltip } from "@adamjanicki/ui";
+import { classNames, Tooltip, ui } from "@adamjanicki/ui";
 import { useState } from "react";
 
 type Props = {
@@ -17,24 +17,27 @@ export default function CopyableCode({ children, className }: Props) {
   return (
     <Tooltip
       anchor={
-        <code
+        <ui.code
           role="button"
           onClick={copy}
           className={classNames(
-            "br2",
             className,
-            copied ? "bg-light-green" : "bg-near-white"
+            copied ? "aui-content-success" : undefined
           )}
+          vfx={{
+            radius: "subtle",
+            padding: "xxs",
+            backgroundColor: copied ? undefined : "muted",
+          }}
           style={{
             cursor: "copy",
             transition: "all 0.25s ease-out",
-            padding: 1,
           }}
         >
           {children}
-        </code>
+        </ui.code>
       }
-      className="flex w-fc"
+      vfx={{ axis: "x", width: "fit" }}
     >
       {copied ? "Copied!" : "Copy"}
     </Tooltip>
