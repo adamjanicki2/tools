@@ -7,54 +7,55 @@ import {
   ui,
   UnstyledLink,
 } from "@adamjanicki/ui";
-import { type ReactNode, useState } from "react";
+import { useState } from "react";
+import Logo from "src/img/logo.svg?react";
+import { tools } from "src/pages/tools";
 
-export default function Nav() {
+type NavlinkProps = {
+  to: string;
+  children: React.ReactNode;
+};
+
+function Nav() {
   const [open, setOpen] = useState(false);
+  const closeMenu = () => setOpen(false);
+
+  function Navlink(props: NavlinkProps) {
+    return (
+      <ui.li className="navlink-li">
+        <Link className="navlink" onClick={closeMenu} {...props} />
+      </ui.li>
+    );
+  }
 
   return (
-    <ui.nav vfx={{ paddingY: "s", paddingX: "l" }}>
-      <Box
-        vfx={{ axis: "x", align: "center", justify: "between" }}
-        className="bar-container"
-      >
+    <ui.nav className="nav">
+      <Box vfx={{ axis: "x", align: "center", justify: "between" }}>
         <UnstyledLink
-          className="nav-title"
           to="/"
-          onClick={() => setOpen(false)}
+          vfx={{ axis: "x", align: "center", gap: "s" }}
+          onClick={closeMenu}
         >
-          React Skeleton
+          <ui.span className="nav-title desktop">Tools</ui.span>
+          <Logo width="36" height="36" />
         </UnstyledLink>
         <Box className="mobile">
-          <Hamburger open={open} onClick={() => setOpen((prev) => !prev)} />
+          <Hamburger open={open} onClick={() => setOpen(!open)} />
         </Box>
       </Box>
-      <Box
-        className="desktop navlink-container"
-        // force display to be open on mobile when hamburger is toggled
-        style={open ? { display: "flex" } : undefined}
+      <ui.ul
+        vfx={{ axis: "y" }}
+        className="desktop link-container"
+        style={{ display: open ? "flex" : undefined }}
       >
-        <Navlink to="/" onClick={() => setOpen(false)}>
-          Home
-        </Navlink>
-        <Navlink to="/about/" onClick={() => setOpen(false)}>
-          About
-        </Navlink>
-      </Box>
+        {tools.map((tool, i) => (
+          <Navlink key={i} to={`/${tool.path}`}>
+            {tool.name}
+          </Navlink>
+        ))}
+      </ui.ul>
     </ui.nav>
   );
 }
 
-type NavlinkProps = {
-  to: string;
-  children: ReactNode;
-  onClick: () => void;
-};
-
-const Navlink = (props: NavlinkProps) => (
-  <Link
-    vfx={{ width: "full", fontWeight: 5, color: "default" }}
-    style={{ whiteSpace: "nowrap" }}
-    {...props}
-  />
-);
+export default Nav;
