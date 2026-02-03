@@ -6,12 +6,12 @@ import {
   Input,
   Select,
   TextArea,
-  Tooltip,
   ui,
 } from "@adamjanicki/ui";
-import { infoSquare, vista } from "@adamjanicki/ui/icons";
+import { vista } from "@adamjanicki/ui/icons";
 import html2canvas from "html2canvas";
 import { useRef, useState } from "react";
+import useAlert from "src/hooks/useAlert";
 
 // default browser fonts
 const fonts = [
@@ -37,7 +37,6 @@ const backgroundFitOptions = [
   "cover",
   "contain",
   "fill",
-  "none",
   "scale-down",
 ] as const;
 type BackgroundFit = (typeof backgroundFitOptions)[number];
@@ -58,10 +57,14 @@ const backgroundPositionOptions = [
 ] as const;
 type BackgroundPosition = (typeof backgroundPositionOptions)[number];
 
+type BackgroundMode = "color" | "image";
+
 export default function TextToImage() {
   const [font, setFont] = useState<Font>("System");
   const [fontSize, setFontSize] = useState(defaultFontSize);
-  const [background, setBackground] = useState("ffffff");
+  const [backgroundMode, setBackgroundMode] = useState<BackgroundMode>("color");
+  const [backgroundColor, setBackgroundColor] = useState("ffffff");
+  const [backgroundImage, setBackgroundImage] = useState("");
   const [backgroundFit, setBackgroundFit] = useState<BackgroundFit>("cover");
   const [backgroundPosition, setBackgroundPosition] =
     useState<BackgroundPosition>("center");
@@ -97,30 +100,16 @@ export default function TextToImage() {
     backgroundRepeat: "no-repeat",
   };
 
-  let icon: React.ReactNode = (
-    <Tooltip
-      offset={2}
-      anchor={<Icon icon={infoSquare} vfx={{ color: "muted" }} />}
-      vfx={{ fontSize: "s", fontWeight: 5, z: "nav", color: "default" }}
-    >
-      Can be either an image URL, or hex color
-    </Tooltip>
-  );
-
-  const { src, color, fallback } = getBackgroundInfo(background);
-  if (src) {
+  if (backgroundMode === "image" && backgroundImage) {
     boxStyle = {
       ...boxStyle,
-      backgroundImage: `url(${src})`,
+      backgroundImage: `url(${backgroundImage})`,
       backgroundSize: backgroundFit,
       backgroundPosition,
     };
-    icon = <Icon icon={vista} />;
-  } else if (color) {
-    boxStyle.backgroundColor = `#${color}`;
-    icon = "#";
   } else {
-    boxStyle.backgroundColor = `#${fallback}`;
+    const color = getBackgroundColor(backgroundColor);
+    boxStyle.backgroundColor = `#${color}`;
   }
 
   return (
@@ -167,25 +156,26 @@ export default function TextToImage() {
         <ui.h3 vfx={{ marginY: "s" }}>Text Color</ui.h3>
         <ColorInput value={textColor} setValue={setTextColor} />
         <ui.h3 vfx={{ marginY: "s" }}>Background</ui.h3>
-        <IconInput
-          startIcon={
-            <Box vfx={{ axis: "x", align: "center", color: "muted" }}>
-              {icon}
-            </Box>
-          }
-          vfx={{ width: "full", gap: "xs", paddingLeft: "s" }}
-          inputProps={{
-            value: background,
-            onChange: (e) => setBackground(e.target.value),
-          }}
+        <Select
+          options={["color", "image"]}
+          getOptionLabel={(option) => (option === "color" ? "Color" : "Image")}
+          onChange={(e) => setBackgroundMode(e.target.value as BackgroundMode)}
+          value={backgroundMode}
+          vfx={{ width: "full" }}
         />
-        <BackgroundImageOptions
-          hasImage={Boolean(src)}
-          fit={backgroundFit}
-          setFit={setBackgroundFit}
-          position={backgroundPosition}
-          setPosition={setBackgroundPosition}
-        />
+        {backgroundMode === "color" ? (
+          <ColorInput value={backgroundColor} setValue={setBackgroundColor} />
+        ) : (
+          <Box vfx={{ axis: "y", gap: "s" }}>
+            <UploadInput onUpload={(dataUrl) => setBackgroundImage(dataUrl)} />
+            <BackgroundImageOptions
+              fit={backgroundFit}
+              setFit={setBackgroundFit}
+              position={backgroundPosition}
+              setPosition={setBackgroundPosition}
+            />
+          </Box>
+        )}
       </Box>
       <Box vfx={{ axis: "y" }} className="image-section">
         <Box vfx={{ border: true, overflow: "hidden" }}>
@@ -252,7 +242,6 @@ function LabeledSelect<T extends string>({
 
 const hexColorRegex = /^([A-Fa-f0-9]{0,6})$/;
 const fullHexColorRegex = /^([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
-const dataUrlRegex = /^data:image\/[a-zA-Z]+;base64,/;
 
 function ColorInput({ value: color, setValue: setColor }: Props) {
   return (
@@ -276,7 +265,6 @@ function ColorInput({ value: color, setValue: setColor }: Props) {
 }
 
 type BackgroundImageOptionsProps = {
-  hasImage: boolean;
   fit: BackgroundFit;
   setFit: (value: BackgroundFit) => void;
   position: BackgroundPosition;
@@ -284,14 +272,11 @@ type BackgroundImageOptionsProps = {
 };
 
 function BackgroundImageOptions({
-  hasImage,
   fit,
   setFit,
   position,
   setPosition,
 }: BackgroundImageOptionsProps) {
-  if (!hasImage) return null;
-
   return (
     <Box vfx={{ axis: "y", gap: "s" }}>
       <LabeledSelect
@@ -310,16 +295,10 @@ function BackgroundImageOptions({
   );
 }
 
-const urlRegex =
-  /^(https?:\/\/)?([a-zA-Z\d-]+\.)+[a-zA-Z]{2,}(\/[\w\d\-._~:/?#[\]@!$&'()*+,;=%]*)?$/i;
-
-function getBackgroundInfo(background: string) {
-  const trimmed = background.trim();
-  if (urlRegex.test(trimmed) || dataUrlRegex.test(trimmed)) {
-    return { src: trimmed };
-  }
-  if (fullHexColorRegex.test(trimmed)) return { color: trimmed };
-  return { fallback: "fff" };
+function getBackgroundColor(value: string) {
+  const trimmed = value.trim();
+  if (fullHexColorRegex.test(trimmed)) return trimmed;
+  return "fff";
 }
 
 type CheckboxProps = {
@@ -339,5 +318,56 @@ function Checkbox({ checked, toggle, label }: CheckboxProps) {
         onChange={(e) => toggle(e.target.checked)}
       />
     </Box>
+  );
+}
+
+function UploadInput({ onUpload }: { onUpload: (dataUrl: string) => void }) {
+  const [, setAlert] = useAlert();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === "string") {
+        onUpload(result);
+      } else {
+        setAlert({
+          type: "error",
+          message: "Error reading image file",
+        });
+      }
+    };
+    reader.onerror = () => {
+      setAlert({
+        type: "error",
+        message: "Error reading image file",
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <>
+      <Box vfx={{ axis: "x", gap: "s" }}>
+        <Button
+          vfx={{ axis: "x", align: "center", gap: "s" }}
+          onClick={() => inputRef.current?.click()}
+          variant="secondary"
+        >
+          <Icon icon={vista} /> Upload image
+        </Button>
+      </Box>
+      <Input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleChange}
+        style={{ display: "none" }}
+      />
+    </>
   );
 }
