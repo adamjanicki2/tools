@@ -11,6 +11,7 @@ import {
 import { vista } from "@adamjanicki/ui/icons";
 import html2canvas from "html2canvas";
 import { useRef, useState } from "react";
+import useAlert from "src/hooks/useAlert";
 
 // default browser fonts
 const fonts = [
@@ -321,6 +322,7 @@ function Checkbox({ checked, toggle, label }: CheckboxProps) {
 }
 
 function UploadInput({ onUpload }: { onUpload: (dataUrl: string) => void }) {
+  const [, setAlert] = useAlert();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -333,9 +335,18 @@ function UploadInput({ onUpload }: { onUpload: (dataUrl: string) => void }) {
       if (typeof result === "string") {
         onUpload(result);
       } else {
+        setAlert({
+          type: "error",
+          message: "Error reading image file",
+        });
       }
     };
-    reader.onerror = () => {};
+    reader.onerror = () => {
+      setAlert({
+        type: "error",
+        message: "Error reading image file",
+      });
+    };
     reader.readAsDataURL(file);
   };
 

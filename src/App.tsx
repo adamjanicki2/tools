@@ -1,11 +1,11 @@
 import { Box, Route, Router, Routes } from "@adamjanicki/ui";
+import Alert from "src/components/Alert";
 import Footer from "src/components/Footer";
 import Nav from "src/components/Nav";
+import Page from "src/components/Page";
 import Home from "src/pages/Home";
 import NotFound from "src/pages/NotFound";
 import { tools } from "src/pages/tools";
-
-import Page from "./components/Page";
 
 export default function App() {
   return (
@@ -32,6 +32,7 @@ export default function App() {
           </Routes>
           <Footer />
         </Box>
+        <Alert />
       </Box>
     </Router>
   );
