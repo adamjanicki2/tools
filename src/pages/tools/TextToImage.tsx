@@ -146,8 +146,8 @@ export default function TextToImage() {
           />
           <Select
             aria-label="font"
-            options={fonts as any}
-            onChange={(e) => setFont(e.target.value as Font)}
+            options={fonts}
+            onSelect={setFont}
             value={font}
           />
         </Box>
@@ -159,7 +159,7 @@ export default function TextToImage() {
         <Select
           options={["color", "image"]}
           getOptionLabel={(option) => (option === "color" ? "Color" : "Image")}
-          onChange={(e) => setBackgroundMode(e.target.value as BackgroundMode)}
+          onSelect={setBackgroundMode}
           value={backgroundMode}
           vfx={{ width: "full" }}
         />
@@ -231,8 +231,8 @@ function LabeledSelect<T extends string>({
       </ui.span>
       <Select
         aria-label={label}
-        options={options as unknown as string[]}
-        onChange={(e) => setValue(e.target.value as T)}
+        options={options}
+        onSelect={setValue}
         value={value}
         vfx={{ stretch: "grow" }}
       />

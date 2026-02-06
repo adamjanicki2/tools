@@ -23,9 +23,9 @@ export default function CodePrettifier() {
       <Box vfx={{ axis: "y", gap: "m" }} className="prettifier-section">
         <Box vfx={{ axis: "x", align: "center", gap: "s" }}>
           <Select
-            options={Object.keys(lintOptions)}
-            getOptionLabel={(option) => lintOptions[option as Lang]}
-            onChange={(e) => setLang(e.target.value as Lang)}
+            options={Object.keys(lintOptions) as Lang[]}
+            getOptionLabel={(option) => lintOptions[option]}
+            onSelect={setLang}
             value={lang}
           />
           <Button
